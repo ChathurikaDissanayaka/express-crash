@@ -1,4 +1,4 @@
-import express from "express"
+import express from "express";
 const router = express.Router();
 
 let posts = [
@@ -27,6 +27,20 @@ router.get("/:id", (req, res) => {
   }
 
   res.status(200).json(post);
+});
+
+// Create new post
+router.post("/", (req, res) => {
+  const newPost = {
+    id: posts.length + 1,
+    title: req.body.title,
+  };
+
+  if (!newPost.title) {
+    return res.status(404).json({ message: "Plese include a title." });
+  }
+  posts.push(newPost);
+  res.status(201).json(posts);
 });
 
 export default router;
