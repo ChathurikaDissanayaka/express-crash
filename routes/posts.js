@@ -1,3 +1,4 @@
+import { error } from "console";
 import express from "express";
 const router = express.Router();
 
@@ -18,49 +19,56 @@ router.get("/", (req, res) => {
 });
 
 // Get a single post
-router.get("/:id", (req, res) => {
+router.get("/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
-  // res.status(200).json(posts.filter((post) => post.id === id));
   const post = posts.find((post) => post.id === id);
   if (!post) {
-    return res.status(404).json({ message: `A post with id ${id} not found.` });
+    const error = new Error(`A post with id ${id} not found.`)
+    error.status = 404;
+    return next(error)
   }
 
   res.status(200).json(post);
 });
 
 // Create new post
-router.post("/", (req, res) => {
+router.post("/", (req, res, next) => {
   const newPost = {
     id: posts.length + 1,
     title: req.body.title,
   };
 
   if (!newPost.title) {
-    return res.status(404).json({ message: "Plese include a title." });
+    const error = new Error("Plese include a title.")
+    error.status = 400;
+    return next(error)
   }
   posts.push(newPost);
   res.status(201).json(posts);
 });
 
 // Update post
-router.put("/:id", (req, res) => {
+router.put("/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   const post = posts.find((post) => post.id === id);
   if (!post) {
-    return res.status(404).json({ message: `A post with id ${id} not found.` });
+    const error = new Error(`A post with id ${id} not found.`)
+    error.status = 404;
+    return next(error)
   }
   post.title = req.body.title;
   res.status(200).json(posts);
 });
 
 // Delete post
-router.delete("/:id", (req, res) => {
+router.delete("/:id", (req, res, next) => {
   const id = parseInt(req.params.id);
   const post = posts.find((post) => post.id === id);
 
   if (!post) {
-    return res.status(404).json({ message: `A post with id ${id} not found.` });
+    const error = new Error(`A post with id ${id} not found.`)
+    error.status = 404;
+    return next(error)
   }
   posts = posts.filter((post) => post.id !== id);
   res.status(200).json(posts);
