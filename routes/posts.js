@@ -62,8 +62,8 @@ router.delete("/:id", (req, res) => {
   if (!post) {
     return res.status(404).json({ message: `A post with id ${id} not found.` });
   }
-  posts = posts.filter((post) => post.id !== id)
-  res.status(200).json(posts)
+  posts = posts.filter((post) => post.id !== id);
+  res.status(200).json(posts);
 });
 
 export default router;
