@@ -15,7 +15,7 @@ export const getPosts = (req, res) => {
   res.status(200).json(posts);
 };
 
-// @desc Get a sinle post
+// @desc Get a single post
 // @route GET /api/posts/:id
 export const getPost = (req, res, next) => {
   const id = parseInt(req.params.id);
